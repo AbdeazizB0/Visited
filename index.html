@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Top Websites</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>	
+body {
+    font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #1f1f1f;
+      color: #fff;
+}
+
+#app {
+    display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+}
+
+a {
+      margin: 10px;
+      padding: 7px;
+      background-color: #2f2f2f;
+      text-decoration: none;
+      color: #fff;
+      transition: background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 15px;
+    height: 100px;
+    width: 100px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-transform: capitalize;
+    font-weight: bold;
+    border-radius: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+}
+
+a img {
+    margin-bottom: 10px;
+    height: 50px;
+    width: 50px;
+    background-color: white;
+    border-radius: 9px;
+}
+
+a:hover {
+    opacity: 1;
+    background-color: #3f3f3f;
+}
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      const app = document.getElementById("app");
+      let websites = [];
+      let currentIndex = 0;
+      const batchSize = 100;
+
+      // Function to load more websites
+      function loadWebsites() {
+        for (let i = 0; i < batchSize; i++) {
+          if (currentIndex >= websites.length) {
+            // We've loaded all the websites, so remove the scroll listener
+            window.removeEventListener("scroll", handleScroll);
+            return;
+          }
+
+          const website = websites[currentIndex];
+          if (website) {
+            const link = document.createElement("a");
+            link.href = "http://" + website;
+            link.target = "_blank";
+            const name = website.split(".")[0];
+            link.innerHTML = `<img src="https://icons.duckduckgo.com/ip3/${website}.ico" alt="${name}" loading="lazy">${name}`;
+            app.appendChild(link);
+            currentIndex++;
+          }
+        }
+      }
+
+      // Function to handle the scroll event
+      function handleScroll() {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+        if (scrollTop + clientHeight >= scrollHeight - 5) {
+          loadWebsites();
+        }
+      }
+
+      fetch("websitez.txt")
+        .then((response) => response.text())
+        .then((text) => {
+          websites = text.split("\n");
+          loadWebsites();
+          window.addEventListener("scroll", handleScroll);
+        });
+    </script>
+  </body>
+</html>
