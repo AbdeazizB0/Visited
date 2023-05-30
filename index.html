@@ -78,7 +78,7 @@ a:hover {
           const website = websites[currentIndex];
           if (website) {
             const link = document.createElement("a");
-            link.href = "http://" + website;
+            link.href = "https://" + website;
             link.target = "_blank";
             const name = website.split(".")[0];
             link.innerHTML = `<img src="https://icons.duckduckgo.com/ip3/${website}.ico" alt="${name}" loading="lazy">${name}`;
